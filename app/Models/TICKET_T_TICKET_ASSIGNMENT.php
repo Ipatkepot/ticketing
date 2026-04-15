@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class TicketAssignment extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['ticket_id', 'user_id'];
+    
     protected $table = 'TICKET_T_TICKET_ASSIGNMENT';
+    protected $fillable = ['ticket_id', 'user_id'];
+    
 
     public function ticket()
     {
