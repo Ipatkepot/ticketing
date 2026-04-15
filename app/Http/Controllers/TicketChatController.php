@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewTicketMessage;
-use App\Models\Ticket;
+use App\Models\TICKET_T_TICKET;
 use App\Models\TicketChat;
 use App\Models\User;
 use Illuminate\Http\Request;
