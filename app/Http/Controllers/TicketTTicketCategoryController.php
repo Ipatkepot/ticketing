@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TicketCategory;
+use App\Models\TICKET_T_TICKET_CATEGORY;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TicketCategoryController extends Controller
+class TicketTTicketCategoryController extends Controller
 {
     public function __construct()
     {
@@ -19,8 +19,8 @@ class TicketCategoryController extends Controller
      */
     public function index()
     {
-        $ticket_categories = \App\Models\TicketCategory::all();
-        $ticket_categories = TicketCategory::orderBy('name', 'asc')->paginate(10);
+        $ticket_categories = \App\Models\TICKET_T_TICKET_CATEGORY::all();
+        $ticket_categories = TICKET_T_TICKET_CATEGORY::orderBy('name', 'asc')->paginate(10);
         return view('ticket_categories.index', compact('ticket_categories'));
     }
 
@@ -41,7 +41,7 @@ class TicketCategoryController extends Controller
             'name' => 'required|string|max:255'
         ]);
 
-        TicketCategory::create([
+        TICKET_T_TICKET_CATEGORY::create([
             'name' => $request->name,
         ]);
 
@@ -51,7 +51,7 @@ class TicketCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TicketCategory $ticketCategory)
+    public function show(TICKET_T_TICKET_CATEGORY $ticketCategory)
     {
         //
     }
@@ -59,7 +59,7 @@ class TicketCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TicketCategory $ticketCategory)
+    public function edit(TICKET_T_TICKET_CATEGORY $ticketCategory)
     {
         return view('ticket_categories.edit', compact('ticketCategory'));
     }
@@ -67,7 +67,7 @@ class TicketCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TicketCategory $ticketCategory)
+    public function update(Request $request, TICKET_T_TICKET_CATEGORY $ticketCategory)
     {
         $request->validate([
             'name' => 'required|string|max:255'
@@ -83,7 +83,7 @@ class TicketCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TicketCategory $ticketCategory)
+    public function destroy(TICKET_T_TICKET_CATEGORY $ticketCategory)
     {
         $ticketCategory->delete();
         return redirect()->route('ticket_categories.index')->with('success', 'Kategori berhasil dihapus.');

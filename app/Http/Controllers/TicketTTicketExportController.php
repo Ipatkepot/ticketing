@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ticket;
+use App\Models\TICKET_T_TICKET;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-class TicketExportController extends Controller
+class TicketTTicketExportController extends Controller
 {
     public function exportExcel()
     {
@@ -24,7 +24,7 @@ class TicketExportController extends Controller
         $sheet->setCellValue('F1', 'Tanggal');
 
         // Data
-        $tickets = Ticket::with(['user', 'category', 'priority'])->get();
+        $tickets = TICKET_T_TICKET::with(['user', 'category', 'priority'])->get();
         $row = 2;
         foreach ($tickets as $ticket) {
             $sheet->setCellValue('A' . $row, $ticket->title);

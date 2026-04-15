@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ticket;
-use App\Models\TicketCategory;
-use App\Models\TicketPriority;
+use App\Models\TICKER_T_TICKET;
+use App\Models\TICKET_T_TICKET_CATEGORY;
+use App\Models\TICKET_T_TICKET_PRIORITY;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class TicketController extends Controller
+class TicketTTicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::with(['user', 'category', 'priority', 'assignment.staff'])
+        $tickets = TICKET_T_TICKET::with(['user', 'category', 'priority', 'assignment.staff'])
         ->where('user_id', Auth::id())
         ->orderBy('title', 'desc')
         ->paginate(10);
@@ -24,8 +24,8 @@ class TicketController extends Controller
 
     public function create()
     {
-        $categories = TicketCategory::all();
-        $priorities = TicketPriority::all();
+        $categories = TICKET_T_TICKET_CATEGORY::all();
+        $priorities = TICKET_T_TICKET_PRIORITY::all();
         return view('tickets.create', compact('categories', 'priorities'));
     }
 
@@ -63,7 +63,7 @@ class TicketController extends Controller
 
 
     //  Tambahkan method show detail tiket
-    public function show(Ticket $ticket)
+    public function show(TICKET_T_TICKET $ticket)
     {
         // hanya user terkait atau admin/staff yang bisa lihat
         $user = Auth::user();
@@ -80,7 +80,7 @@ class TicketController extends Controller
             'priority_id' => 'required|exists:ticket_priorities,id'
         ]);
 
-        $ticket = Ticket::findOrFail($id);
+        $ticket = TICKET_T_TICKET::findOrFail($id);
         $ticket->priority_id = $request->priority_id;
         $ticket->save();
 
@@ -88,7 +88,7 @@ class TicketController extends Controller
     }
 
 
-    public function storeBeritaAcara(Request $request, Ticket $ticket)
+    public function storeBeritaAcara(Request $request, TICKET_T_TICKET $ticket)
     {
         // Pastikan hanya staff yang ditugaskan yang bisa menyimpan
         if (auth()->user()->usertype !== 'staff' || $ticket->assignment->user_id !== auth()->id()) {
@@ -105,7 +105,7 @@ class TicketController extends Controller
         return back()->with('success', 'Berita acara berhasil disimpan.');
     }
 
-    public function uploadDokumen(Request $request, Ticket $ticket)
+    public function uploadDokumen(Request $request, TICKET_T_TICKET $ticket)
     {
         $request->validate([
             'dokumen_resmi' => 'required|file|mimes:pdf,doc,docx|max:2048',
@@ -131,17 +131,17 @@ class TicketController extends Controller
         return redirect()->back()->with('success', 'Dokumen resmi berhasil diunggah.');
     }
 
-    public function edit(Ticket $ticket)
+    public function edit(TICKET_T_TICKET $ticket)
     {
         //
     }
 
-    public function update(Request $request, Ticket $ticket)
+    public function update(Request $request, TICKET_T_TICKET $ticket)
     {
         //
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(TICKET_T_TICKET $ticket)
     {
         //
     }

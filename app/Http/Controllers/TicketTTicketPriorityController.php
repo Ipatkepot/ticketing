@@ -6,7 +6,7 @@ use App\Models\TicketPriority;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TicketPriorityController extends Controller
+class TicketTTicketPriorityController extends Controller
 {
     public function __construct()
     {

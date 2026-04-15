@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Events\NewTicketMessage;
 use App\Models\TICKET_T_TICKET;
-use App\Models\TicketChat;
+use App\Models\TICKET_T_TICKET_CHAT;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class TicketChatController extends Controller
+class TicketTTicketChatController extends Controller
 {
     /**
      * Simpan pesan baru
@@ -21,11 +21,11 @@ class TicketChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
         ]);
 
-        $ticket = TICKET_T_ASSIGNMENT::findOrFail($ticketId);
+        $ticket = TICKET_T_TICKET_ASSIGNMENT::findOrFail($ticketId);
         $receiver = User::findOrFail($request->receiver_id);
         $sender = Auth::user();
 
-        $chat = TicketChat::create([
+        $chat = TICKET_T_TICKET_CHAT::create([
             'ticket_id'   => $ticketId,
             'user_id'     => $sender->id,
             'receiver_id' => $receiver->id,
@@ -61,7 +61,7 @@ class TicketChatController extends Controller
 
 
 
-    public function chatInternal(Ticket $ticket, User $receiver)
+    public function chatInternal(TICKET_T_TICKET $ticket, User $receiver)
     {
         // Tentukan receiver yang *seharusnya* untuk room ini
         // Jika yang login ketuap3ti -> other = staff yang ditugaskan (ticket->assignment->user)
@@ -93,7 +93,7 @@ class TicketChatController extends Controller
         }
 
         // Ambil pesan dua arah antara auth user dan receiver untuk tiket ini
-    $messages = TicketChat::where('ticket_id', $ticket->id)
+    $messages = TICKET_T_TICKET_CHAT::where('ticket_id', $ticket->id)
         ->where(function ($q) use ($receiver) {
             $q->where(function ($sub) use ($receiver) {  // <-- tambahkan use($receiver)
                 $sub->where('user_id', auth()->id())
@@ -117,7 +117,7 @@ class TicketChatController extends Controller
     }
 
 
-    public function chatUser(Ticket $ticket, User $receiver)
+    public function chatUser(TICKET_T_TICKET $ticket, User $receiver)
     {
         // Tentukan receiver yang *seharusnya* untuk room ini
         // Jika yang login staff -> other = pelapor (ticket->user)
@@ -139,7 +139,7 @@ class TicketChatController extends Controller
         }
 
         // Ambil pesan dua arah antara auth user dan receiver
-        $messages = TicketChat::where('ticket_id', $ticket->id)
+        $messages = TICKET_T_TICKET_CHAT::where('ticket_id', $ticket->id)
             ->where(function ($q) use ($receiver) {
                 $q->where(function ($sub) use ($receiver) {
                     $sub->where('user_id', auth()->id())
@@ -163,10 +163,10 @@ class TicketChatController extends Controller
 
     public function showAdminHistory($ticketId)
     {
-        $ticket = Ticket::findOrFail($ticketId);
+        $ticket = TICKET_T_TICKET::findOrFail($ticketId);
 
         // Ambil semua chat di tiket ini
-        $messages = TicketChat::with('user')
+        $messages = TICKET_T_TICKET_CHAT::with('user')
             ->where('ticket_id', $ticketId)
             ->orderBy('created_at', 'asc')
             ->get();
