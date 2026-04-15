@@ -21,6 +21,12 @@ class DatabaseSeeder extends Seeder
         TicketPrioritiesSeeder::class,
     ]);
     \App\Models\User::create([
+        'name' => 'Mahasiswa User',
+        'email' => 'mahasiswa@gmail.com',
+        'password' => bcrypt('password'),
+        'usertype' => 'mahasiswa',
+    ]);
+    \App\Models\User::create([
         'name' => 'Admin User',
         'email' => 'admin@gmail.com',
         'password' => bcrypt('password'), 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TICKER_T_TICKET;
+use App\Models\TICKET_T_TICKET;
 use App\Models\TICKET_T_TICKET_CATEGORY;
 use App\Models\TICKET_T_TICKET_PRIORITY;
 use Illuminate\Http\Request;

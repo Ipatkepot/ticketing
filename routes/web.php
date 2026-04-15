@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Broadcast;
 
 use App\Http\Controllers\{
     ProfileController,
-    TicketCategoryController,
-    TicketPriorityController,
+    TicketTTicketCategoryController,
+    TicketTTicketPriorityController,
     UserTypeController,
     UserController,
-    TicketController,
-    TicketChatController,
+    TicketTTicketController,
+    TicketTTicketChatController,
     TicketExportController,
     LaporanPimpinanController,
     StaffTicketController,
@@ -57,11 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Master Data
-    Route::resource('ticket_categories', TicketCategoryController::class);
-    Route::resource('ticket_priorities', TicketPriorityController::class);
+    Route::resource('ticket_categories', TicketTTicketCategoryController::class);
+    Route::resource('ticket_priorities', TicketTTicketPriorityController::class);
     Route::resource('user_types', UserTypeController::class);
     Route::resource('users', UserController::class)->except(['create', 'store', 'show']);
-    Route::resource('tickets', TicketController::class);
+    Route::resource('tickets', TicketTTicketController::class);
 
     // Admin - Manajemen Tiket
     Route::prefix('admin/tickets')->name('admin.tickets.')->group(function () {
@@ -87,23 +87,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pimpinan/laporan/export/{format}', [PimpinanDashboardController::class, 'export'])->name('pimpinan.laporan.export');
 
     // Berita Acara dan Dokumen
-    Route::post('/tickets/{ticket}/berita-acara', [TicketController::class, 'storeBeritaAcara'])->name('tickets.berita_acara.store');
-    Route::post('/tickets/{ticket}/upload-dokumen', [TicketController::class, 'uploadDokumen'])->name('tickets.dokumen.store');
+    Route::post('/tickets/{ticket}/berita-acara', [TicketTTicketController::class, 'storeBeritaAcara'])->name('tickets.berita_acara.store');
+    Route::post('/tickets/{ticket}/upload-dokumen', [TicketTTicketController::class, 'uploadDokumen'])->name('tickets.dokumen.store');
 });
 
 Route::middleware('auth')->group(function () {
     // Chat antara staff dan mahasiswa
-Route::get('/tickets/{ticket}/chat/user/{receiver}', [TicketChatController::class, 'chatUser'])
+Route::get('/tickets/{ticket}/chat/user/{receiver}', [TicketTTicketChatController::class, 'chatUser'])
     ->name('tickets.chat.user');
 
 // Chat internal antara ketuap3ti dan staff
-Route::get('/tickets/{ticket}/chat/internal/{receiver}', [TicketChatController::class, 'chatInternal'])
+Route::get('/tickets/{ticket}/chat/internal/{receiver}', [TicketTTicketChatController::class, 'chatInternal'])
     ->name('tickets.chat.internal');
     // Ambil semua pesan chat (AJAX)
-    Route::get('/tickets/{ticket}/messages', [TicketChatController::class, 'getMessages'])->name('tickets.chat.messages');
+    Route::get('/tickets/{ticket}/messages', [TicketTTicketChatController::class, 'getMessages'])->name('tickets.chat.messages');
 
     // Kirim pesan
-    Route::post('/tickets/{ticket}/chat', [TicketChatController::class, 'store'])->name('tickets.chat.store');
+    Route::post('/tickets/{ticket}/chat', [TicketTTicketChatController::class, 'store'])->name('tickets.chat.store');
 });
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');

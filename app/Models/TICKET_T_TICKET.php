@@ -7,10 +7,10 @@ use App\Models\TicketPriority;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket extends Model
+class TICKET_T_TICKET extends Model
 {
     use HasFactory;
-    protected $table = 'TICKET_T_TICKET';
+    protected $table = 'ticket_t_ticket';
 
     protected $fillable = [
         'title',

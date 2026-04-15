@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketChat extends Model
+class TICKET_T_TICKET_CHAT extends Model
 {
     use HasFactory;
-    protected $table = 'TICKET_T_TICKET_CHAT';
+    protected $table = 'ticket_t_ticket_chat';
 
     protected $fillable = [
         'ticket_id',

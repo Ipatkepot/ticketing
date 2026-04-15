@@ -5,17 +5,17 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketAssignment extends Model
+class TICKET_T_TICKET_ASSIGNMENT extends Model
 {
     use HasFactory;
     
-    protected $table = 'TICKET_T_TICKET_ASSIGNMENT';
+    protected $table = 'ticket_t_ticket_assignment';
     protected $fillable = ['ticket_id', 'user_id'];
     
 
     public function ticket()
     {
-        return $this->belongsTo(\App\Models\Ticket::class);
+        return $this->belongsTo(\App\Models\TICKET_T_TICKET::class);
     }
 
     public function user()

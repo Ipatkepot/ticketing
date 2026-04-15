@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TicketCategory extends Model
+class TICKET_T_TICKET_CATEGORY extends Model
 {
-    protected $table = 'TICKET_T_TICKET_CATEGORY';
+    protected $table = 'ticket_t_ticket_category';
     protected $fillable = [
         'name',
     ];

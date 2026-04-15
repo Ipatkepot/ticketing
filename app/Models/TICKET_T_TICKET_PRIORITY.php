@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TicketPriority extends Model
+class TICKET_T_TICKET_PRIORITY extends Model
 {
-    protected $table = 'TICKET_T_TICKET_PRIORITY';
+    protected $table = 'ticket_t_ticket_priority';
     protected $fillable = [
         'name',
     ];
