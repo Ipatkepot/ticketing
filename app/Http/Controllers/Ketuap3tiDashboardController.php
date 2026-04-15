@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Carbon\Carbon;
-use App\Models\Ticket;
+use App\Models\TICKET_T_TICKET;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
