@@ -14,13 +14,13 @@ class PimpinanDashboardController extends Controller
 {
     public function index()
     {
-        $todayTickets = Ticket::whereDate('created_at', today())->count();
-        $openTickets = Ticket::where('status', 'open')->count();
-        $inProgressTickets = Ticket::where('status', 'in_progress')->count();
-        $completedTickets = Ticket::whereIn('status', ['resolved', 'closed'])->count();
+        $todayTickets = TICKET_T_TICKET::whereDate('created_at', today())->count();
+        $openTickets = TICKET_T_TICKET::where('status', 'open')->count();
+        $inProgressTickets = TICKET_T_TICKET::where('status', 'in_progress')->count();
+        $completedTickets = TICKET_T_TICKET::whereIn('status', ['resolved', 'closed'])->count();
 
         // Data chart: jumlah tiket per bulan
-        $monthlyData = Ticket::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+        $monthlyData = TICKET_T_TICKET::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
             ->groupBy('month')
             ->orderBy('month')
             ->pluck('total', 'month')
