@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Ticket;
+use App\Models\TICKET_T_TICKET;
 use Illuminate\Support\Facades\Auth;
 
 class StaffTicketController extends Controller
@@ -14,7 +14,7 @@ class StaffTicketController extends Controller
         $staffId = Auth::id();
 
         // Ambil semua tiket yang ditugaskan ke staff ini
-        $tickets = Ticket::whereHas('assignment', function ($query) use ($staffId) {
+        $tickets = TICKET_T_TICKET::whereHas('assignment', function ($query) use ($staffId) {
             $query->where('user_id', $staffId);
         })
         ->with(['category', 'priority', 'user'])
