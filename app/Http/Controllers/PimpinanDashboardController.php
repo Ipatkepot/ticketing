@@ -41,29 +41,30 @@ class PimpinanDashboardController extends Controller
     }
 
     public function laporan(Request $request)
-{
-    $range = $request->get('range', '');
-    $status = $request->get('status', '');
+    {
+        $range = $request->get('range', '');
+        $status = $request->get('status', '');
 
-    $query = Ticket::with(['user', 'category', 'priority']);
+        $query = Ticket::with(['user', 'category', 'priority']);
 
-    if ($range === 'day') {
-        $query->whereDate('created_at', Carbon::today());
-    } elseif ($range === 'month') {
-        $query->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', Carbon::now()->year);
-    } elseif ($range === 'year') {
-        $query->whereYear('created_at', Carbon::now()->year);
+        if ($range === 'day') {
+            $query->whereDate('created_at', Carbon::today());
+        } elseif ($range === 'month') {
+            $query->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year);
+        } elseif ($range === 'year') {
+            $query->whereYear('created_at', Carbon::now()->year);
+        }
+
+        if ($status !== '') {
+            $query->where('status', $status);
+        }
+
+        // pakai paginate, bukan get
+        $tickets = $query->latest()->paginate(10)->withQueryString();
+
+        return view('pimpinan.laporan', compact('tickets', 'range', 'status'));
     }
-
-    if ($status !== '') {
-        $query->where('status', $status);
-    }
-
-    $tickets = $query->latest()->get();
-
-    return view('pimpinan.laporan', compact('tickets', 'range', 'status'));
-}
-
 
     public function export(Request $request, $format)
 {

@@ -52,11 +52,35 @@ class TicketManagementController extends Controller
     }
 
     public function show(Ticket $ticket)
-    {
-        $messages = $ticket->messages()->with('user')->orderBy('created_at')->get();
-        $ticket->load(['user', 'category', 'priority', 'chats.user']);
-        return view('admin.tickets.show', compact('ticket', 'messages'));
-    }
+{
+    $ticket->load(['user', 'category', 'priority', 'chats.user']);
+
+    $messages = $ticket->messages()
+        ->with(['user', 'receiver'])
+        ->orderBy('created_at')
+        ->get();
+
+    // Bedakan chat internal vs user
+    $internalMessages = $messages->filter(function ($msg) {
+        return in_array($msg->user?->usertype, ['staff', 'ketuap3ti']) &&
+               in_array($msg->receiver?->usertype, ['staff', 'ketuap3ti']);
+    });
+
+    $userMessages = $messages->filter(function ($msg) {
+        return !(
+            in_array($msg->user?->usertype, ['staff', 'ketuap3ti']) &&
+            in_array($msg->receiver?->usertype, ['staff', 'ketuap3ti'])
+        );
+    });
+
+    return view('admin.tickets.show', compact(
+        'ticket',
+        'messages',
+        'internalMessages',
+        'userMessages'
+    ));
+}
+
 
     // Form assign (ambil dari tabel users yang usertype = staff)
     public function assignForm(Ticket $ticket)

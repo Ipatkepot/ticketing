@@ -20,5 +20,33 @@ class DatabaseSeeder extends Seeder
         TicketCategoriesSeeder::class,
         TicketPrioritiesSeeder::class,
     ]);
+    \App\Models\User::create([
+        'name' => 'Admin User',
+        'email' => 'admin@gmail.com',
+        'password' => bcrypt('password'), 
+        'usertype' => 'admin',
+    ]);
+
+    \App\Models\User::create([
+        'name' => 'Staff User',
+        'email' => 'staff@gmail.com',
+        'password' => bcrypt('password'),
+        'usertype' => 'staff',
+    ]);
+
+    \App\Models\User::create([
+        'name' => 'Ketuap3ti User',
+        'email' => 'ketuap3ti@gmail.com',
+        'password' => bcrypt('password'),
+        'usertype' => 'ketuap3ti',
+    ]);
+
+    
+    \App\Models\User::create([
+        'name' => 'Pimpinan User',
+        'email' => 'pimpinan@gmail.com',
+        'password' => bcrypt('password'),
+        'usertype' => 'pimpinan',
+    ]);
     }
 }

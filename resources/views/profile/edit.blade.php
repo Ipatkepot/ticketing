@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        {{-- Hapus Akun --}}
+        <!-- {{-- Hapus Akun --}}
         <div class="col-lg-12 mb-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-danger text-white">
@@ -39,7 +39,7 @@
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 @endsection

@@ -86,26 +86,83 @@
       </div>
     @endif
       @if(auth()->user()->usertype === 'admin')
-      <h5 class="mt-4">Riwayat Pesan</h5>
-      <div class="card shadow-sm">
-        <div class="card-body p-3" style="max-height: 350px; overflow-y: auto; background-color: #f8f9fa;">
-          @forelse($messages as $message)
-            @php
-              $isOwn = $message->user_id === auth()->id();
-            @endphp
-            <div class="d-flex mb-3 {{ $isOwn ? 'justify-content-end' : 'justify-content-start' }}">
-              <div class="p-2 px-3 rounded-3 shadow-sm {{ $isOwn ? 'bg-primary text-white' : 'bg-light text-dark' }}" style="max-width: 75%;">
-                <div class="small fw-bold mb-1">
-                  {{ $message->user?->name ?? 'User tidak ditemukan' }}
-                  <span class="text-muted float-end small">{{ $message->created_at->format('H:i') }}</span>
-                </div>
-                <div class="small">{{ $message->message }}</div>
-              </div>
+  <h5 class="mt-4">Riwayat Chat User</h5>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body p-3" id="chat-user-history"
+         style="max-height: 350px; overflow-y: auto; background-color: #f8f9fa;">
+      @forelse($userMessages as $message)
+        @php $isOwn = $message->user_id === auth()->id(); @endphp
+        <div class="d-flex mb-3 {{ $isOwn ? 'justify-content-end' : 'justify-content-start' }}">
+          <div class="p-2 px-3 rounded-3 shadow-sm {{ $isOwn ? 'bg-primary text-white' : 'bg-light text-dark' }}"
+               style="max-width: 75%;">
+            <div class="small fw-bold mb-1 d-flex justify-content-between">
+              <span>{{ $message->user?->name ?? 'User tidak ditemukan' }}</span>
+              <span class="text-muted small">{{ $message->created_at->timezone('Asia/Jakarta')->format('H:i') }}</span>
             </div>
-          @empty
-            <p class="text-muted">Belum ada pesan pada tiket ini.</p>
-          @endforelse
+            <div class="small">{{ $message->message }}</div>
+          </div>
         </div>
-      </div>
+      @empty
+        <p class="text-muted">Belum ada chat user.</p>
+      @endforelse
+    </div>
+  </div>
+
+  <h5 class="mt-4">Riwayat Chat Internal</h5>
+  <div class="card shadow-sm">
+    <div class="card-body p-3" id="chat-internal-history"
+         style="max-height: 350px; overflow-y: auto; background-color: #f8f9fa;">
+      @forelse($internalMessages as $message)
+        @php $isOwn = $message->user_id === auth()->id(); @endphp
+        <div class="d-flex mb-3 {{ $isOwn ? 'justify-content-end' : 'justify-content-start' }}">
+          <div class="p-2 px-3 rounded-3 shadow-sm {{ $isOwn ? 'bg-success text-white' : 'bg-light text-dark' }}"
+               style="max-width: 75%;">
+            <div class="small fw-bold mb-1 d-flex justify-content-between">
+              <span>{{ $message->user?->name ?? 'User tidak ditemukan' }}</span>
+              <span class="text-muted small">{{ $message->created_at->timezone('Asia/Jakarta')->format('H:i') }}</span>
+            </div>
+            <div class="small">{{ $message->message }}</div>
+          </div>
+        </div>
+      @empty
+        <p class="text-muted">Belum ada chat internal.</p>
+      @endforelse
+    </div>
+  </div>
 @endif
+@push('scripts')
+<script>
+  const adminChannel = `ticket-{{ $ticket->id }}.{{ auth()->id() }}`;
+
+  window.Echo.private(adminChannel)
+    .listen('.NewTicketMessage', function (e) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'd-flex mb-3 ' + (e.userId === {{ auth()->id() }} ? 'justify-content-end' : 'justify-content-start');
+
+      const bubble = document.createElement('div');
+      bubble.className = 'p-2 px-3 rounded-3 shadow-sm ' + 
+        (e.userId === {{ auth()->id() }} 
+          ? (['staff','ketuap3ti'].includes(e.usertype) ? 'bg-success text-white' : 'bg-primary text-white')
+          : 'bg-light text-dark');
+      bubble.style.maxWidth = '75%';
+
+      const waktu = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      bubble.innerHTML = `
+        <div class="small fw-bold mb-1 d-flex justify-content-between">
+          <span>${e.username}</span>
+          <span class="text-muted small">${waktu}</span>
+        </div>
+        <div class="small">${e.message}</div>
+      `;
+
+      // Tentukan box mana
+      const isInternal = ['staff','ketuap3ti'].includes(e.usertype) &&
+                         ['staff','ketuap3ti'].includes(e.receiver_usertype);
+      const targetBox = isInternal ? 'chat-internal-history' : 'chat-user-history';
+
+      document.getElementById(targetBox).appendChild(wrapper);
+    });
+</script>
+@endpush
 @endsection

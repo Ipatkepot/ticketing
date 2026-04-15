@@ -41,37 +41,43 @@
 
       {{-- Table --}}
       <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-          <thead class="table-light text-center">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light text-center">
+          <tr>
+            <th style="width: 50px;">No</th>
+            <th>Judul</th>
+            <th>Pelapor</th>
+            <th>Kategori</th>
+            <th>Prioritas</th>
+            <th>Status</th>
+            <th>Tanggal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse ($tickets as $i => $ticket)
             <tr>
-              <th style="width: 50px;">No</th>
-              <th>Judul</th>
-              <th>Pelapor</th>
-              <th>Kategori</th>
-              <th>Prioritas</th>
-              <th>Status</th>
-              <th>Tanggal</th>
+              <td class="text-center">
+                {{ $tickets->firstItem() + $i }}
+              </td>
+              <td>{{ $ticket->title }}</td>
+              <td>{{ $ticket->user->name ?? '-' }}</td>
+              <td>{{ $ticket->category->name ?? '-' }}</td>
+              <td>{{ $ticket->priority->name ?? '-' }}</td>
+              <td>{{ ucfirst($ticket->status) }}</td>
+              <td>{{ $ticket->created_at->format('d M Y H:i') }}</td>
             </tr>
-          </thead>
-          <tbody>
-            @forelse ($tickets as $i => $ticket)
-              <tr>
-                <td class="text-center">{{ $i + 1 }}</td>
-                <td>{{ $ticket->title }}</td>
-                <td>{{ $ticket->user->name ?? '-' }}</td>
-                <td>{{ $ticket->category->name ?? '-' }}</td>
-                <td>{{ $ticket->priority->name ?? '-' }}</td>
-                <td>{{ ucfirst($ticket->status) }}</td>
-                <td>{{ $ticket->created_at->format('d M Y H:i') }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="7" class="text-center text-muted">Tidak ada data</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
+          @empty
+            <tr>
+              <td colspan="7" class="text-center text-muted">Tidak ada data</td>
+            </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+    {{-- Pagination --}}
+    <div class="d-flex justify-content-end mt-3">
+        {{ $tickets->links('pagination::bootstrap-5') }}
+    </div>
     </div>
   </div>
 </div>

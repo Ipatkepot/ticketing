@@ -10,6 +10,24 @@
     font-size: 0.75rem;
     padding: 4px 8px;
   }
+  .pagination {
+      justify-content: center;
+  }
+  .pagination .page-link {
+      color: #4e73df;
+      border-radius: 8px;
+      margin: 0 3px;
+      transition: all 0.2s ease-in-out;
+  }
+  .pagination .page-link:hover {
+      background-color: #4e73df;
+      color: white;
+  }
+  .pagination .active .page-link {
+      background-color: #4e73df;
+      border-color: #4e73df;
+      color: white;
+  }
 </style>
 <div class="container-fluid py-4">
   <h4 class="mb-3">Daftar Tiket Masuk</h4>
@@ -175,6 +193,10 @@
             @endforeach
           </tbody>
         </table>
+      </div>
+      {{-- Pagination --}}
+      <div class="mt-4">
+        {{ $tickets->onEachSide(1)->links('pagination::bootstrap-5') }}
       </div>
     </div>
   </div>

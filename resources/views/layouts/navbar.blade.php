@@ -31,7 +31,9 @@
         <li class="nav-item d-flex align-items-center">
           <span class="nav-link text-white font-weight-bold px-2">
             <i class="fas fa-user me-sm-1"></i>
-            {{ Auth::user()->name }}
+            @if(Auth::check())
+                {{ Auth::user()->name }}
+            @endif
           </span>
           <form method="POST" action="{{ route('logout') }}">
             @csrf

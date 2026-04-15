@@ -20,6 +20,7 @@ class TicketPriorityController extends Controller
     public function index()
     {
         $ticket_priorities = \App\Models\TicketPriority::all();
+        $ticket_priorities = TicketPriority::orderBy('name', 'asc')->paginate(10); 
         return view('ticket_priorities.index', compact('ticket_priorities'));
     }
 

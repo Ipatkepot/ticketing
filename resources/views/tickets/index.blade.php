@@ -4,9 +4,9 @@
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
-      <div class="card mb-4">
+      <div class="card mb-4 shadow-sm">
         <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-          <h6 class="mb-0">Daftar Tiket Saya</h6>
+          <h6 class="mb-0 fw-bold">Daftar Tiket Saya</h6>
           <a href="{{ route('tickets.create') }}" class="btn btn-sm btn-primary">
             <i class="fas fa-plus"></i> Buat Tiket Baru
           </a>
@@ -20,9 +20,10 @@
           @endif
 
           <div class="table-responsive p-3">
-            <table class="table align-items-center mb-0 text-center">
-              <thead>
+            <table class="table table-hover align-items-center mb-0 text-center">
+              <thead class="bg-light">
                 <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder">No</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Judul</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Kategori</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Prioritas</th>
@@ -32,18 +33,19 @@
                 </tr>
               </thead>
               <tbody>
-              @foreach($tickets as $ticket)
-                  <tr>
-                      <td>
+              @forelse($tickets as $index => $ticket)
+                  <tr style="font-size: 0.9rem;">
+                      <td class="align-middle">{{ $tickets->firstItem() + $index }}</td>
+                      <td class="align-middle">
                           <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="text-primary text-decoration-underline fw-semibold">
                               <i class="fas fa-eye"></i> {{ $ticket->title }}
                           </a>
                       </td>
-                      <td>{{ $ticket->category?->name ?? '-' }}</td>
-                      <td>{{ $ticket->priority?->name ?? '-' }}</td>
-                      <td>{{ ucfirst($ticket->status ?? '-') }}</td>
-                      <td>{{ $ticket->created_at?->format('d M Y H:i') ?? '-' }}</td>
-                      <td>
+                      <td class="align-middle">{{ $ticket->category?->name ?? '-' }}</td>
+                      <td class="align-middle">{{ $ticket->priority?->name ?? '-' }}</td>
+                      <td class="align-middle">{{ ucfirst($ticket->status ?? '-') }}</td>
+                      <td class="align-middle">{{ $ticket->created_at?->format('d M Y H:i') ?? '-' }}</td>
+                      <td class="align-middle">
                           @php
                               $usertype = auth()->user()->usertype;
                           @endphp
@@ -70,9 +72,18 @@
                           @endif
                       </td>
                   </tr>
-              @endforeach
+              @empty
+                  <tr>
+                      <td colspan="7" class="text-center text-muted py-4">Belum ada tiket.</td>
+                  </tr>
+              @endforelse
               </tbody>
             </table>
+          </div>
+
+          {{-- Pagination --}}
+          <div class="d-flex justify-content-end mt-3 me-3">
+              {{ $tickets->links('pagination::bootstrap-5') }}
           </div>
         </div>
       </div>

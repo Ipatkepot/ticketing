@@ -15,10 +15,11 @@ class TicketController extends Controller
     {
         $tickets = Ticket::with(['user', 'category', 'priority', 'assignment.staff'])
         ->where('user_id', Auth::id())
-        ->latest()
-        ->get();
+        ->orderBy('title', 'desc')
+        ->paginate(10);
 
         return view('tickets.index', compact('tickets'));
+
     }
 
     public function create()

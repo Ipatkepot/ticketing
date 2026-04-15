@@ -20,6 +20,7 @@ class TicketCategoryController extends Controller
     public function index()
     {
         $ticket_categories = \App\Models\TicketCategory::all();
+        $ticket_categories = TicketCategory::orderBy('name', 'asc')->paginate(10);
         return view('ticket_categories.index', compact('ticket_categories'));
     }
 

@@ -11,11 +11,24 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('usertype', '!=', 'admin')->get(); // misalnya admin tidak mengedit sesama admin
-        return view('users.index', compact('users'));
+        $search = $request->input('search');
+
+        $users = User::when($search, function($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('usertype', 'like', "%{$search}%");
+            })
+            ->orderBy('name')
+            ->paginate(10);
+
+        // Supaya pagination ikut bawa parameter search
+        $users->appends(['search' => $search]);
+
+        return view('users.index', compact('users', 'search'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,6 +60,25 @@ class UserController extends Controller
 
         return redirect()->route('users-management.index')->with('success', 'User berhasil ditambahkan.');
     }
+
+    public function search(Request $request)
+{
+    $search = $request->get('query', '');
+
+    $users = User::where('name', 'like', "%{$search}%")
+        ->orWhere('email', 'like', "%{$search}%")
+        ->orWhere('usertype', 'like', "%{$search}%")
+        ->orderBy('name', 'asc')
+        ->paginate(10);
+
+    // Untuk AJAX, kembalikan hanya partial table
+    if ($request->ajax()) {
+        return view('users.partials.table', compact('users'))->render();
+    }
+
+    return view('users.index', compact('users'));
+}
+
 
     /**
      * Display the specified resource.
@@ -88,8 +120,10 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('users.index')
+        ->with('success', 'User berhasil dihapus.');
     }
 }

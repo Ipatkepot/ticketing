@@ -106,5 +106,7 @@ Route::get('/tickets/{ticket}/chat/internal/{receiver}', [TicketChatController::
     Route::post('/tickets/{ticket}/chat', [TicketChatController::class, 'store'])->name('tickets.chat.store');
 });
 
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
 // Breeze Auth
 require __DIR__.'/auth.php';
