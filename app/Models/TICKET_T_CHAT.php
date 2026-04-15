@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TicketChat extends Model
 {
     use HasFactory;
+    protected $table = 'TICKET_T_TICKET_CHAT';
 
     protected $fillable = [
         'ticket_id',

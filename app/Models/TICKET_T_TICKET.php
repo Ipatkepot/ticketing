@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
     use HasFactory;
+    protected $table = 'TICKET_T_TICKET';
 
     protected $fillable = [
         'title',

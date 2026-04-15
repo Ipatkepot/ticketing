@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TicketPriority extends Model
 {
+    
     protected $fillable = [
         'name',
     ];

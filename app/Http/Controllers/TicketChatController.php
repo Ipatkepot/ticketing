@@ -21,7 +21,7 @@ class TicketChatController extends Controller
             'receiver_id' => 'required|exists:users,id',
         ]);
 
-        $ticket = Ticket::findOrFail($ticketId);
+        $ticket = TICKET_T_ASSIGNMENT::findOrFail($ticketId);
         $receiver = User::findOrFail($request->receiver_id);
         $sender = Auth::user();
 
