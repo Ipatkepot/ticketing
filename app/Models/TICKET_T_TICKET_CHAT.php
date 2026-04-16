@@ -34,6 +34,6 @@ class TICKET_T_TICKET_CHAT extends Model
 
     public function ticket()
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(TICKET_T_TICKET::class);
     }
 }

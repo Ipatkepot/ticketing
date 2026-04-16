@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TicketPriority;
+use App\Models\TICKET_T_TICKET_PRIORITY;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +19,8 @@ class TicketTTicketPriorityController extends Controller
      */
     public function index()
     {
-        $ticket_priorities = \App\Models\TicketPriority::all();
-        $ticket_priorities = TicketPriority::orderBy('name', 'asc')->paginate(10); 
+        $ticket_priorities = \App\Models\TICKET_T_TICKET_PRIORITY::all();
+        $ticket_priorities = TICKET_T_TICKET_PRIORITY::orderBy('name', 'asc')->paginate(10); 
         return view('ticket_priorities.index', compact('ticket_priorities'));
     }
 
@@ -41,7 +41,7 @@ class TicketTTicketPriorityController extends Controller
             'name' => 'required|string|max:255'
         ]);
 
-        TicketPriority::create([
+        TICKET_T_TICKET_PRIORITY::create([
             'name' => $request->name,
         ]);
 
@@ -51,7 +51,7 @@ class TicketTTicketPriorityController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TicketPriority $ticketPriority)
+    public function show(TICKET_T_TICKET_PRIORITY $ticketPriority)
     {
         //
     }
@@ -59,7 +59,7 @@ class TicketTTicketPriorityController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TicketPriority $ticketPriority)
+    public function edit(TICKET_T_TICKET_PRIORITY $ticketPriority)
     {
         return view('ticket_priorities.edit', compact('ticketPriority'));
     }
@@ -67,7 +67,7 @@ class TicketTTicketPriorityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TicketPriority $ticketPriority)
+    public function update(Request $request, TICKET_T_TICKET_PRIORITY $ticketPriority)
     {
         $request->validate([
             'name' => 'required|string|max:255'
@@ -83,7 +83,7 @@ class TicketTTicketPriorityController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TicketPriority $ticketPriority)
+    public function destroy(TICKET_T_TICKET_PRIORITY $ticketPriority)
     {
         $ticketPriority->delete();
         return redirect()->route('ticket_priorities.index')->with('success', 'Prioritas berhasil dihapus.');

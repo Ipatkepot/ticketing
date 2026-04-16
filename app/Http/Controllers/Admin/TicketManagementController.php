@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ticket;
+use App\Models\TICKET_T_TICKET;
 use App\Models\User;
-use App\Models\TicketPriority;
-use App\Models\TicketAssignment;
+use App\Models\TICKET_T_TICKET_PRIORITY;
+use App\Models\TICKET_T_TICKET_ASSIGNMENT;
 use Illuminate\Http\Request;
 
 class TicketManagementController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Ticket::with(['category', 'priority', 'user', 'assignment.user']);
+        $query = TICKET_T_TICKET::with(['category', 'priority', 'user', 'assignment.user']);
 
         // Filter berdasarkan status
         if ($request->has('status') && $request->status != '') {
@@ -30,8 +30,8 @@ class TicketManagementController extends Controller
         $tickets = $query->latest()->paginate(10);
 
         //  Ini bagian penting yang kamu ubah:
-        $priorityList = \App\Models\TicketPriority::pluck('name')->toArray(); // untuk filter dropdown atas
-        $priorities = \App\Models\TicketPriority::all(); // untuk dropdown ubah prioritas
+        $priorityList = \App\Models\TICKET_T_TICKET_PRIORITY::pluck('name')->toArray(); // untuk filter dropdown atas
+        $priorities = \App\Models\TICKET_T_TICKET_PRIORITY::all(); // untuk dropdown ubah prioritas
         $statuses = ['open', 'in_progress', 'resolved', 'closed', 'rejected'];
 
         return view('admin.tickets.index', compact('tickets', 'priorities', 'priorityList', 'statuses'));
@@ -39,7 +39,7 @@ class TicketManagementController extends Controller
 
 
 
-    public function updateStatus(Request $request, Ticket $ticket)
+    public function updateStatus(Request $request, TICKET_T_TICKET $ticket)
     {
         $request->validate([
             'status' => 'required|in:open,in_progress,resolved,rejected,closed'
@@ -51,7 +51,7 @@ class TicketManagementController extends Controller
         return redirect()->back()->with('success', 'Status tiket berhasil diperbarui.');
     }
 
-    public function show(Ticket $ticket)
+    public function show(TICKET_T_TICKET $ticket)
 {
     $ticket->load(['user', 'category', 'priority', 'chats.user']);
 
@@ -83,20 +83,20 @@ class TicketManagementController extends Controller
 
 
     // Form assign (ambil dari tabel users yang usertype = staff)
-    public function assignForm(Ticket $ticket)
+    public function assignForm(TICKET_T_TICKET $ticket)
     {
         $staffList = User::where('usertype', 'staff')->get();
         return view('admin.tickets.assign', compact('ticket', 'staffList'));
     }
 
     // Simpan penugasan
-    public function assign(Request $request, Ticket $ticket)
+    public function assign(Request $request, TICKET_T_TICKET $ticket)
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
 
-        TicketAssignment::updateOrCreate(
+        TICKET_T_TICKET_ASSIGNMENT::updateOrCreate(
             ['ticket_id' => $ticket->id],
             ['user_id' => $request->user_id]
         );
@@ -110,7 +110,7 @@ class TicketManagementController extends Controller
             'priority_id' => 'required|exists:ticket_priorities,id',
         ]);
 
-        $ticket = Ticket::findOrFail($id);
+        $ticket = TICKET_T_TICKET::findOrFail($id);
         $ticket->priority_id = $request->priority_id;
         $ticket->save();
 

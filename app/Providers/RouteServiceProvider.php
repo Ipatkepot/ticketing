@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\Models\TICKET_T_TICKET;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -28,5 +29,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
         });
+
+        Route::model('ticket', TICKET_T_TICKET::class);
+
     }
 }

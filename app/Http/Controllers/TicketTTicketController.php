@@ -29,13 +29,13 @@ class TicketTTicketController extends Controller
         return view('tickets.create', compact('categories', 'priorities'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category_id' => 'required|exists:ticket_categories,id',
-            // 'priority_id' => 'required|exists:ticket_priorities,id',
+            'category_id' => 'required|exists:ticket_t_ticket_category,id',
+            // 'priority_id' => 'required|exists:ticket_t_ticket_priority,id', 
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
@@ -48,7 +48,7 @@ class TicketTTicketController extends Controller
         //dd($request->all(), $attachment);
 
         // Simpan tiket
-        Ticket::create([
+        TICKET_T_TICKET::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
@@ -63,8 +63,10 @@ class TicketTTicketController extends Controller
 
 
     //  Tambahkan method show detail tiket
-    public function show(TICKET_T_TICKET $ticket)
+    public function show($id)
     {
+       $ticket = TICKET_T_TICKET::with(['category', 'priority', 'user', 'assignment.staff'])
+              ->findOrFail($id);
         // hanya user terkait atau admin/staff yang bisa lihat
         $user = Auth::user();
         if ($user->id !== $ticket->user_id && !in_array($user->usertype, ['admin', 'staff'])) {
@@ -77,7 +79,8 @@ class TicketTTicketController extends Controller
     public function updatePriority(Request $request, $id)
     {
         $request->validate([
-            'priority_id' => 'required|exists:ticket_priorities,id'
+            // FIX: Gunakan nama tabel yang benar
+            'priority_id' => 'required|exists:ticket_t_ticket_priority,id'
         ]);
 
         $ticket = TICKET_T_TICKET::findOrFail($id);
@@ -85,12 +88,13 @@ class TicketTTicketController extends Controller
         $ticket->save();
 
         return back()->with('success', 'Prioritas tiket berhasil diperbarui.');
-    }
+    }   
 
 
-    public function storeBeritaAcara(Request $request, TICKET_T_TICKET $ticket)
+  public function storeBeritaAcara(Request $request, $id)
     {
-        // Pastikan hanya staff yang ditugaskan yang bisa menyimpan
+        $ticket = TICKET_T_TICKET::findOrFail($id);
+
         if (auth()->user()->usertype !== 'staff' || $ticket->assignment->user_id !== auth()->id()) {
             abort(403);
         }
@@ -105,13 +109,14 @@ class TicketTTicketController extends Controller
         return back()->with('success', 'Berita acara berhasil disimpan.');
     }
 
-    public function uploadDokumen(Request $request, TICKET_T_TICKET $ticket)
+    public function uploadDokumen(Request $request, $id)
     {
+        $ticket = TICKET_T_TICKET::findOrFail($id);
+
         $request->validate([
             'dokumen_resmi' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        // Cek apakah user adalah staff yang ditugaskan
         if (
             auth()->user()->usertype !== 'staff' ||
             !$ticket->assignment ||
@@ -120,7 +125,6 @@ class TicketTTicketController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        // Simpan file
         if ($request->hasFile('dokumen_resmi')) {
             $path = $request->file('dokumen_resmi')->store('dokumen_resmi', 'public');
             $ticket->update([

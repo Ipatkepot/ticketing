@@ -26,12 +26,12 @@ class TICKET_T_TICKET extends Model
 
     public function category()
     {
-        return $this->belongsTo(TicketCategory::class, 'category_id');
+        return $this->belongsTo(TICKET_T_TICKET_CATEGORY::class, 'category_id');
     }
 
     public function priority()
     {
-        return $this->belongsTo(TicketPriority::class, 'priority_id');
+        return $this->belongsTo(TICKET_T_TICKET_PRIORITY::class, 'priority_id');
     }
 
     public function user()
@@ -39,22 +39,25 @@ class TICKET_T_TICKET extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Ticket.php
+    
     public function assignment()
     {
-        return $this->hasOne(TicketAssignment::class);
+       
+        return $this->hasOne(TICKET_T_TICKET_ASSIGNMENT::class, 'ticket_id');
     }
 
-
-
+  
     public function chats()
     {
-        return $this->hasMany(TicketChat::class);
+       
+        return $this->hasMany(TICKET_T_TICKET_CHAT::class, 'ticket_id');
     }
 
+    
     public function messages()
     {
-        return $this->hasMany(TicketChat::class);
+        
+        return $this->hasMany(TICKET_T_TICKET_CHAT::class, 'ticket_id');
     }
 
 
