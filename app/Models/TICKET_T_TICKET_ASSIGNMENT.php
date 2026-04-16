@@ -15,7 +15,7 @@ class TICKET_T_TICKET_ASSIGNMENT extends Model
 
     public function ticket()
     {
-        return $this->belongsTo(\App\Models\TICKET_T_TICKET::class);
+        return $this->belongsTo(\App\Models\TICKET_T_TICKET::class, 'ticket_id');
     }
 
     public function user()

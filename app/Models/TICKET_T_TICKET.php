@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Models;
-use App\Models\TicketChat;
-use App\Models\TicketPriority;
+use App\Models\TICKET_T_TICKET_CATEGORY;
+use App\Models\TICKET_T_TICKET_PRIORITY;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

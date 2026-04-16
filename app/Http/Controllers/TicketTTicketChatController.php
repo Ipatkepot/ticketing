@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewTicketMessage;
 use App\Models\TICKET_T_TICKET;
 use App\Models\TICKET_T_TICKET_CHAT;
+use App\Models\TICKET_T_TICKET_ASSIGNMENT;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,52 +15,41 @@ class TicketTTicketChatController extends Controller
     /**
      * Simpan pesan baru
      */
-     public function store(Request $request, $ticketId)
-    {
-        $request->validate([
-            'message' => 'required|string',
-            'receiver_id' => 'required|exists:users,id',
-        ]);
+   public function store(Request $request, TICKET_T_TICKET $ticket) // Ubah $ticketId jadi Model $ticket
+{
+    $request->validate([
+        'message' => 'required|string',
+        'receiver_id' => 'required|exists:users,id',
+    ]);
 
-        $ticket = TICKET_T_TICKET_ASSIGNMENT::findOrFail($ticketId);
-        $receiver = User::findOrFail($request->receiver_id);
-        $sender = Auth::user();
+    // Kita tidak butuh findOrFail lagi karena sudah di-inject lewat parameter
+    $receiver = User::findOrFail($request->receiver_id);
+    $sender = Auth::user();
 
-        $chat = TICKET_T_TICKET_CHAT::create([
-            'ticket_id'   => $ticketId,
-            'user_id'     => $sender->id,
-            'receiver_id' => $receiver->id,
-            'message'     => $request->message,
-        ]);
+    // Simpan pesan
+    TICKET_T_TICKET_CHAT::create([
+        'ticket_id'   => $ticket->id, // Gunakan $ticket->id
+        'user_id'     => $sender->id,
+        'receiver_id' => $receiver->id,
+        'message'     => $request->message,
+    ]);
 
+    // Broadcast (Opsional)
+    try {
         broadcast(new NewTicketMessage(
-            ticketId: $ticketId,
-            userId: $sender->id,
-            username: $sender->name,
-            usertype: $sender->usertype,
-            message: $request->message,
-            receiverId: $receiver->id,
+            $ticket->id,
+            $sender->id,
+            $sender->name,
+            $sender->usertype,
+            $request->message,
+            $receiver->id,
         ))->toOthers();
-
-        // Tentukan jenis chat berdasarkan usertype pengirim dan penerima
-        $internalUserTypes = ['ketuap3ti', 'staff'];
-
-        if (in_array($sender->usertype, $internalUserTypes) && in_array($receiver->usertype, $internalUserTypes)) {
-            // Chat internal ketuap3ti <-> staff
-            return redirect()->route('tickets.chat.internal', [
-                'ticket' => $ticket->id,
-                'receiver' => $receiver->id,
-            ]);
-        } else {
-            // Chat user <-> staff/ketuap3ti, atau mahasiswa <-> staff
-            return redirect()->route('tickets.chat.user', [
-                'ticket' => $ticket->id,
-                'receiver' => $receiver->id,
-            ]);
-        }
+    } catch (\Exception $e) {
+        // Log error jika perlu
     }
 
-
+    return back()->with('success', 'Pesan berhasil dikirim!');
+}
 
     public function chatInternal(TICKET_T_TICKET $ticket, User $receiver)
     {

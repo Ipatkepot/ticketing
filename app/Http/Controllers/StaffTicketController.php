@@ -13,14 +13,17 @@ class StaffTicketController extends Controller
     {
         $staffId = Auth::id();
 
-        // Ambil semua tiket yang ditugaskan ke staff ini
-        $tickets = TICKET_T_TICKET::whereHas('assignment', function ($query) use ($staffId) {
-            $query->where('user_id', $staffId);
+     $tickets = TICKET_T_TICKET::with(['category', 'priority', 'user'])
+        ->where(function ($query) use ($staffId) {
+         
+            $query->whereHas('assignment', function ($q) use ($staffId) {
+                $q->where('user_id', $staffId);
+            })
+        
+            ->orWhereDoesntHave('assignment');
         })
-        ->with(['category', 'priority', 'user'])
         ->latest()
         ->get();
-
         return view('staff.tickets.index', compact('tickets'));
     }
 }
