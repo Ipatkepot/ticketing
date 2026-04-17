@@ -104,18 +104,16 @@ class TicketManagementController extends Controller
         return redirect()->route('admin.tickets.index')->with('success', 'Staff berhasil ditugaskan.');
     }
 
-    public function updatePriority(Request $request, $id)
-    {
-        $request->validate([
-            'priority_id' => 'required|exists:ticket_priorities,id',
-        ]);
+    public function updatePriority(Request $request, TICKET_T_TICKET $ticket)
+{
+    $request->validate([
+        'priority_id' => 'required|exists:ticket_t_ticket_priority,id',
+    ]);
 
-        $ticket = TICKET_T_TICKET::findOrFail($id);
-        $ticket->priority_id = $request->priority_id;
-        $ticket->save();
+    $ticket->priority_id = $request->priority_id;
+    $ticket->save();
 
-        return redirect()->back()->with('success', 'Prioritas tiket berhasil diperbarui.');
-    }
-
+    return redirect()->back()->with('success', 'Prioritas tiket berhasil diperbarui.');
+}
 
 }
