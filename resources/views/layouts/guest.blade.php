@@ -1,30 +1,51 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="{{ asset('argon/assets/css/nucleo-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('argon/assets/css/argon-dashboard.css') }}" rel="stylesheet">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <style>
+        .main-content {
+            background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important;
+            min-height: 100vh;
+            display: flex;
+            align-items: center; /* Membuat card bener-bener di tengah */
+            position: relative;
+            overflow: hidden;
+        }
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+        /* Animasi Background */
+        .bg-circles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .circle { position: absolute; background: rgba(255, 255, 255, 0.05); border-radius: 50%; animation: move 25s infinite linear; }
+        @keyframes move {
+            from { transform: translateY(0) rotate(0deg); opacity: 1; }
+            to { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-radius: 1rem !important;
+            border: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <div class="bg-circles">
+            <div class="circle" style="width: 80px; height: 80px; left: 10%; bottom: -100px;"></div>
+            <div class="circle" style="width: 150px; height: 150px; left: 70%; bottom: -200px; animation-delay: 8s;"></div>
         </div>
-    </body>
+
+        <div class="container">
+            {{ $slot }}
+        </div>
+    </div>
+</body>
 </html>
