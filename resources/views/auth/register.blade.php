@@ -1,53 +1,82 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('layouts.app') {{-- Ganti dengan nama file layout utama kamu --}}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Register')
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+        <div class="card bg-secondary border-0 mb-0">
+            <div class="card-header bg-transparent pb-5">
+                <div class="text-muted text-center mt-2 mb-3"><small>Sign up with credentials</small></div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+                <form method="POST" action="{{ route('register') }}" role="form">
+                    @csrf
 
-    {{-- CSRF Token --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <div class="form-group mb-3">
+                        <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                            </div>
+                            <input id="name" class="form-control @error('name') is-invalid @enderror" 
+                                   placeholder="Name" type="text" name="name" 
+                                   value="{{ old('name') }}" required autofocus autocomplete="name">
+                        </div>
+                        @error('name')
+                            <small class="text-danger mt-1">{{ $message }}</small>
+                        @enderror
+                    </div>
 
-    {{-- Fonts & Icons --}}
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-    <link href="{{ asset('argon/assets/css/nucleo-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('argon/assets/css/nucleo-svg.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+                    <div class="form-group mb-3">
+                        <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                            </div>
+                            <input id="email" class="form-control @error('email') is-invalid @enderror" 
+                                   placeholder="Email" type="email" name="email" 
+                                   value="{{ old('email') }}" required autocomplete="email">
+                        </div>
+                        @error('email')
+                            <small class="text-danger mt-1">{{ $message }}</small>
+                        @enderror
+                    </div>
 
-    {{-- Argon CSS --}}
-    <link href="{{ asset('argon/assets/css/argon-dashboard.css') }}" rel="stylesheet">
+                    <div class="form-group">
+                        <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                            </div>
+                            <input id="password" class="form-control @error('password') is-invalid @enderror" 
+                                   placeholder="Password" type="password" name="password" 
+                                   required autocomplete="new-password">
+                        </div>
+                        @error('password')
+                            <small class="text-danger mt-1">{{ $message }}</small>
+                        @enderror
+                    </div>
 
-    {{-- Laravel Vite (breeze tailwind, kalau masih dipakai) --}}
-    <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-</head>
+                    <div class="form-group mt-3">
+                        <div class="input-group input-group-merge input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                            </div>
+                            <input id="password_confirmation" class="form-control" 
+                                   placeholder="Confirm Password" type="password" 
+                                   name="password_confirmation" required>
+                        </div>
+                    </div>
 
-<body class="g-sidenav-show bg-gray-100">
-
-    {{-- Sidebar --}}
-    @include('layouts.sidebar')
-
-    {{-- Main Content --}}
-    <main class="main-content position-relative border-radius-lg">
-
-        {{-- Navbar --}}
-        @include('layouts.navbar')
-
-        {{-- Page Content --}}
-        <div class="container-fluid py-4">
-            @yield('content')
-        </div>
-        
-    </main>
-
-    {{-- Argon JS --}}
-    <script src="{{ asset('argon/assets/js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('argon/assets/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('argon/assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('argon/assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('argon/assets/js/argon-dashboard.min.js') }}"></script>
-</body>
-
-</html>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary mt-4">Create account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <a href="{{ route('login') }}" class="text-light"><small>Already registered? Sign in</small></a>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
