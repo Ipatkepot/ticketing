@@ -20,7 +20,7 @@
                     <div class="row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-8 px-5">
                             <h1 class="text-white">Daftar Akun</h1>
-                            <p class="text-lead text-white">Eusian data di handap ambeh bisa asup ka sistem.</p>
+                            <p class="text-lead text-white">Isi data di bawah ini agar bisa masuk.</p>
                         </div>
                     </div>
                 </div>
