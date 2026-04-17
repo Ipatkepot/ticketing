@@ -1,67 +1,97 @@
-<x-guest-layout>
-    <div class="card bg-secondary shadow border-0">
-        {{-- Header Card make warna Biru Primary jiga di Navbar/Sidebar --}}
-        <div class="card-header bg-primary py-4 text-center">
-            <h3 class="text-white mb-0">{{ __('Daftar Akun Anyar') }}</h3>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Register | {{ config('app.name') }}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href="{{ asset('argon/assets/css/nucleo-icons.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="{{ asset('argon/assets/css/argon-dashboard.css') }}" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="main-content">
+        <div class="header bg-primary py-7 py-lg-8">
+            <div class="container">
+                <div class="header-body text-center mb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+                            <h1 class="text-white">Daftar Akun</h1>
+                            <p class="text-lead text-white">Eusian data di handap ambeh bisa asup ka sistem.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="card-body px-lg-5 py-lg-5">
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
 
-                <div class="form-group mb-3">
-                    <div class="input-group input-group-merge input-group-alternative border-0 shadow-sm">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="ni ni-hat-3 text-primary"></i></span>
+        <div class="container mt--8 pb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 col-md-7">
+                    <div class="card bg-secondary shadow border-0">
+                        <div class="card-body px-lg-5 py-lg-5">
+                            <form method="POST" action="{{ route('register') }}">
+                                @csrf
+
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-merge input-group-alternative border-0 shadow">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-hat-3 text-primary"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Nama Lengkap" type="text" name="name" value="{{ old('name') }}" required autofocus>
+                                    </div>
+                                    @error('name') <small class="text-danger pl-2">{{ $message }}</small> @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-merge input-group-alternative border-0 shadow">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-email-83 text-primary"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Email" type="email" name="email" value="{{ old('email') }}" required>
+                                    </div>
+                                    @error('email') <small class="text-danger pl-2">{{ $message }}</small> @enderror
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-merge input-group-alternative border-0 shadow">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-lock-circle-open text-primary"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Password" type="password" name="password" required>
+                                    </div>
+                                    @error('password') <small class="text-danger pl-2">{{ $message }}</small> @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="input-group input-group-merge input-group-alternative border-0 shadow">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="ni ni-lock-circle-open text-primary"></i></span>
+                                        </div>
+                                        <input class="form-control" placeholder="Konfirmasi Password" type="password" name="password_confirmation" required>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary w-100 my-4 shadow-lg">REGISTER</button>
+                                </div>
+                            </form>
                         </div>
-                        <input id="name" class="form-control" type="text" name="name" :value="old('name')" placeholder="Nama Lengkap" required autofocus autocomplete="name" />
                     </div>
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <div class="input-group input-group-merge input-group-alternative border-0 shadow-sm">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="ni ni-email-83 text-primary"></i></span>
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <a href="{{ route('login') }}" class="text-primary font-weight-bold"><small>Geus boga akun? Login didiyeu</small></a>
                         </div>
-                        <input id="email" class="form-control" type="email" name="email" :value="old('email')" placeholder="Email Address" required autocomplete="username" />
                     </div>
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
-
-                <div class="form-group mb-3">
-                    <div class="input-group input-group-merge input-group-alternative border-0 shadow-sm">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="ni ni-lock-circle-open text-primary"></i></span>
-                        </div>
-                        <input id="password" class="form-control" type="password" name="password" placeholder="Password" required autocomplete="new-password" />
-                    </div>
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group input-group-merge input-group-alternative border-0 shadow-sm">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="ni ni-lock-circle-open text-primary"></i></span>
-                        </div>
-                        <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" required autocomplete="new-password" />
-                    </div>
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-                </div>
-
-                <div class="text-center">
-                    {{-- Tombol Register warna Primary (Biru) --}}
-                    <button type="submit" class="btn btn-primary w-100 my-4 shadow">
-                        {{ __('Register') }}
-                    </button>
-                </div>
-
-                <div class="flex items-center justify-center mt-2">
-                    <a class="text-sm text-primary font-weight-bold" href="{{ route('login') }}">
-                        {{ __('Already registered?') }}
-                    </a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</x-guest-layout>
+
+    <script src="{{ asset('argon/assets/js/core/jquery.min.js') }}"></script>
+    <script src="{{ asset('argon/assets/js/core/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('argon/assets/js/argon-dashboard.min.js') }}"></script>
+</body>
+</html>
